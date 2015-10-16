@@ -1,6 +1,11 @@
 <resources>
-    <string name="app_name">DAS_football_tips</string>
+    <string name="app_name">МастерБет</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="tabela">тековна табела</string>
+    <string name="predlogtiket">предлог тикет</string>
+    <string name="dosegahnitiketi">досегашни тикети</string>
+
 </resources>
