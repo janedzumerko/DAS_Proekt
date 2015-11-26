@@ -24,15 +24,24 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class Tab2 extends Fragment {
 
     Button buttonMatches;
 
-    private static String urlRequestTodayMatches = "http://football-api.com/api/?Action=today&APIKey=" +
-            "8a5032b6-36a1-af35-9f577a444de1&comp_id=1204";
+    // private static String urlRequestTodayMatches = "http://football-api.com/api/?Action=today&APIKey=" + "8a5032b6-36a1-af35-9f577a444de1&comp_id=1204";
+    private static String urlRequestTodayMatches = "http://52.26.249.101/RestGet/index?date=";
 
+    private String getDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "dd.MM.yyyy", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -40,7 +49,7 @@ public class Tab2 extends Fragment {
 
         buttonMatches = (Button) v.findViewById(R.id.button2);
 
-
+        urlRequestTodayMatches += getDateTime();
         buttonMatches.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
