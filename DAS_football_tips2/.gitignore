@@ -1,3 +1,6 @@
+/app/src/main/res/layout/content_test.xml
+/app/src/main/res/layout/activity_test.xml
+/app/src/main/java/com/com/dians/theexp/sqlite/TestActivity.java
 .gradle
 /local.properties
 /.idea/workspace.xml

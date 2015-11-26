@@ -7,5 +7,6 @@
     <string name="tabela">тековна табела</string>
     <string name="predlogtiket">предлог тикет</string>
     <string name="dosegahnitiketi">досегашни тикети</string>
+    <string name="title_activity_test">TestActivity</string>
 
 </resources>

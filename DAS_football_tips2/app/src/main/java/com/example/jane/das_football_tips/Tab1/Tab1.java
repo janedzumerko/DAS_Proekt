@@ -3,12 +3,11 @@ package com.example.jane.das_football_tips.Tab1;
 /**
  * Created by Jane on 10/12/2015.
  */
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,11 +35,6 @@ import java.util.HashMap;
 
 public class Tab1 extends Fragment {
 
-    Button button1;
-
-    private static String urlRequest = "http://football-api.com/api/?Action=standings&APIKey=" +
-            "8a5032b6-36a1-af35-9f577a444de1&comp_id=1204";
-
     // JSON Node names
     private static final String TAG_TEAMS = "teams";
     private static final String TAG_ID = "stand_id";
@@ -54,19 +48,16 @@ public class Tab1 extends Fragment {
     private static final String TAG_POSITION = "stand_position";
     private static final String TAG_GOAL_DIFFERENCE = "stand_gd";
     private static final String TAG_POINTS = "stand_points";
-
+    //private static String urlRequest = "http://football-api.com/api/?Action=standings&APIKey=" + "8a5032b6-36a1-af35-9f577a444de1&comp_id=1204";
+    private static String urlRequest = "http://52.26.249.101/RestTable/index";
+    public CircularProgressView progresSearch;
+    Button button1;
     // contacts JSONArray
     JSONArray contacts = null;
-
     // Hashmap for ListView
     ArrayList<HashMap<String, String>> contactList;
-
     ListView lv;
-
     LinearLayout layoutForInfo;
-
-
-    public CircularProgressView progresSearch;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
