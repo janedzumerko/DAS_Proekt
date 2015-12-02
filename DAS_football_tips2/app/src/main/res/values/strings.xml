@@ -7,6 +7,38 @@
     <string name="tabela">тековна табела</string>
     <string name="predlogtiket">предлог тикет</string>
     <string name="dosegahnitiketi">досегашни тикети</string>
+    <string name="no_matches_message">Нема натпревари денес</string>
+
     <string name="title_activity_test">TestActivity</string>
+    <string name="login">Login</string>
+    <string name="title_activity_login">Sign in</string>
+
+    // related to login and signup
+    <string name="username">Username:</string>
+    <string name="password">Password:</string>
+    <string name="email">Email:</string>
+    <string name="login_url">http://52.26.249.101/Login/login</string>
+    <string name="register_url">http://52.26.249.101/Login/register</string>
+
+
+
+    <string name="nedela">Недела</string>
+    <string name="ponedelnik">Понеделник</string>
+    <string name="vtornik">Вторник</string>
+    <string name="sreda">Среда</string>
+    <string name="cetvrtok">Четврток</string>
+    <string name="petok">Петок</string>
+    <string name="sabota">Сабота</string>
+
+    <string-array
+        name="denovi_array">
+        <item>@string/nedela</item>
+        <item>@string/ponedelnik</item>
+        <item>@string/vtornik</item>
+        <item>@string/sreda</item>
+        <item>@string/cetvrtok</item>
+        <item>@string/petok</item>
+        <item>@string/sabota</item>
+    </string-array>
 
 </resources>
