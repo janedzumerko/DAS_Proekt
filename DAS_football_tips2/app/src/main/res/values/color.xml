@@ -2,5 +2,6 @@
         <color name="ColorPrimary">#41bb92</color>
         <color name="ColorPrimaryDark">#379f7c</color>
         <color name="tabsScrollColor">#ffffffff</color>
-
+        <color name="iron">#CCCCCC</color>
+        <color name="white">#FFFFFF</color>
 </resources>
