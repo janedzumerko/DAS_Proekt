@@ -1,10 +1,13 @@
 package com.dians.theexp.auth;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -22,6 +25,8 @@ import com.example.jane.das_football_tips.R;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.app.PendingIntent.getActivity;
+
 public class LoginActivity extends AppCompatActivity {
 
     EditText inputUsername;
@@ -31,6 +36,8 @@ public class LoginActivity extends AppCompatActivity {
     String user = null;
     String pass = null;
 
+    ProgressDialog progressDialog;
+
     String resp = null;
     String loginURL = "http://52.26.249.101/Login/login";
 
@@ -38,6 +45,13 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        String checkLoggedInUserName = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext()).getString("username",
+                        Singleton.getInstance().username);
+        if (checkLoggedInUserName != null) {
+            sendToMain();
+        }
 
         inputUsername = (EditText) findViewById(R.id.input_username);
         inputPassword = (EditText) findViewById(R.id.input_password);
@@ -47,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
+
                     login();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -70,6 +85,13 @@ public class LoginActivity extends AppCompatActivity {
                 pass = hashingImpl.getGeneratedSecuredPasswordHash();
             }*/
 
+            // initialize progress dialog
+            progressDialog = new ProgressDialog(LoginActivity.this, ProgressDialog.STYLE_SPINNER);
+            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            progressDialog.setCancelable(false);
+            progressDialog.setMessage("Signing in...");
+            progressDialog.show();
+
             performPOSTRequest(user, pass);
         }
     }
@@ -82,10 +104,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
+                    progressDialog.dismiss();
                     Log.d("response", "" + response);
                     if (response.contains("Ne postoi")) {
+
                         Toast.makeText(getApplicationContext(), "Wrong username or password!", Toast.LENGTH_SHORT).show();
                     } else if (response.contains("id")) {
+                        Toast.makeText(getApplicationContext(), "Sign in successful!", Toast.LENGTH_SHORT).show();
+                        commitUsernamePrefs();
                         sendToMain();
                     }
                 } catch (Exception e) {
@@ -96,6 +122,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError verror) {
                 VolleyLog.e("Error: ", verror.getStackTrace());
+                progressDialog.dismiss();
             }
         }) {
             @Override
@@ -113,6 +140,8 @@ public class LoginActivity extends AppCompatActivity {
 
         // add the request object to the queue to be executed
         requestQueue.add(req);
+
+
     }
 
 
@@ -124,9 +153,20 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void sendToMain() {
-        // Start the Signup activity
+        // Start the Main activity
+
+
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
         finish();
+
+    }
+
+    public void commitUsernamePrefs() {
+        // save username
+        Singleton.getInstance().username = user;
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
+                .putString("username", Singleton.getInstance().username)
+                .commit();
     }
 }
