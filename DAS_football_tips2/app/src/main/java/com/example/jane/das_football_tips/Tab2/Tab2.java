@@ -15,7 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.com.dians.theexp.sqlite.helper.Match;
+import com.com.dians.theexp.sqlite.helper.Ticket;
+import com.com.dians.theexp.sqlite.model.MySQLiteHelper;
 import com.example.jane.das_football_tips.R;
 
 import org.json.JSONArray;
@@ -32,6 +36,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class Tab2 extends Fragment {
 
@@ -70,6 +75,8 @@ public class Tab2 extends Fragment {
     private Button desno;
     private Button levo;
 
+    private Button btnCreateTicket;
+
     RecyclerView rv;
     TextView tv;
 
@@ -87,6 +94,30 @@ public class Tab2 extends Fragment {
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity().getApplicationContext());
         rv.setLayoutManager(llm);
+
+        btnCreateTicket = (Button) v.findViewById(R.id.create_ticket);
+        btnCreateTicket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (matchesTips != null) {
+                    MySQLiteHelper db = new MySQLiteHelper(getContext());
+                    long ticket_id = db.createTicket(new Ticket(getDateTime()));
+                    for (MatchTipInfo mti : matchesTips) {
+                        Log.d("addticket-mti", mti.toString());
+                        db.createMatch(new Match(mti.getHome_team(), mti.getAway_team(), Integer.parseInt(mti.getFull_time_bet())), ticket_id);
+                    }
+                    db.getTicketCount();
+                    db.getMatchCount();
+
+
+                    db.closeDB();
+
+                    Toast.makeText(getContext(), "Your ticket has been created.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "No matches selected.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         desno = (Button) v.findViewById(R.id.nadesno);
         desno.setOnClickListener(new View.OnClickListener() {
@@ -191,6 +222,12 @@ public class Tab2 extends Fragment {
     }
 
 
+    private String getDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
 
 
     class DailyMatches extends AsyncTask<Void, Void, String> {

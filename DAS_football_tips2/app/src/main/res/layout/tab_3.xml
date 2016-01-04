@@ -5,11 +5,18 @@
     android:background="#404040">
 
 
-    <ListView
-        android:id="@+id/lvTiketi"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/ticket_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <TextView
+        android:id="@+id/msg_tab3"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-    </ListView>
-
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_centerInParent="true"
+        android:text="You haven't created any tickets. You can do that in the previous tab."
+        />
 </RelativeLayout>
