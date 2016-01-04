@@ -48,4 +48,9 @@ public class MatchTipInfo {
     public void setFull_time_bet(String full_time_bet) {
         this.full_time_bet = full_time_bet;
     }
+
+    @Override
+    public String toString() {
+        return home_team + " " + away_team + " " + goal_bet + " " + full_time_bet;
+    }
 }

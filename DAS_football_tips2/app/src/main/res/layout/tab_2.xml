@@ -58,6 +58,16 @@
             android:textColor="#ffffff"
             android:text="@string/no_matches_message"
             android:visibility="gone" />
+
+
     </LinearLayout>
+
+    <Button
+        android:id="@+id/create_ticket"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Create Ticket"
+        />
 
 </RelativeLayout>
