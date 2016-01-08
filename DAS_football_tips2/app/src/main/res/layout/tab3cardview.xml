@@ -26,10 +26,11 @@
             android:layout_height="wrap_content"
             android:text="Matches:"
             android:gravity="center_vertical"
-            android:textSize="10dp"
+            android:textSize="12dp"
             android:layout_below="@id/title"
             android:layout_alignParentLeft="true"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp"
             android:layout_marginLeft="5dp"/>
 
 

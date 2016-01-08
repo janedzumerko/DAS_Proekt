@@ -118,12 +118,14 @@ public class SignupActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     Log.d("response", "" + response);
                     if (response.contains("\"status\":\"Success\"")) {
-                        Toast.makeText(getApplicationContext(), "Account created successfully! Signing you in...", Toast.LENGTH_SHORT).show();
-                        commitUsernamePrefs();
-                        sendToMain();
+                        Toast.makeText(getApplicationContext(), "Account created successfully! You can log in now.", Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
                     else if (response.contains("\"status\":\"Failed\"")) {
-                        Toast.makeText(getApplicationContext(), "Account alredy exists!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Account already exists!", Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (Exception e) {
@@ -176,23 +178,8 @@ public class SignupActivity extends AppCompatActivity {
 
     public void sendToLoginForm(View v) {
         // Start the Signup activity
-        Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    public void sendToMain() {
-        // Start the Signup activity
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    public void commitUsernamePrefs() {
-        // save username
-        Singleton.getInstance().username = user;
-        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
-                .putString("username", Singleton.getInstance().username)
-                .commit();
     }
 }

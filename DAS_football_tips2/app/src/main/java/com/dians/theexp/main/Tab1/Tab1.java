@@ -201,17 +201,22 @@ public class Tab1 extends Fragment {
             Log.i("JANE", response);
 
             setVisibilityToView();
-            ListAdapter adapter = new SimpleAdapter(
-                    getActivity().getApplicationContext() , contactList,
-                    R.layout.list_item, new String[] { TAG_POSITION, TAG_NAME,
-                    TAG_ROUND, TAG_GOAL_DIFFERENCE, TAG_POINTS },
-                    new int[] { R.id.team_position,
-                            R.id.team_name,
-                            R.id.matches_till_now,
-                            R.id.team_goals,
-                            R.id.team_points});
+            try {
+                ListAdapter adapter = new SimpleAdapter(
+                        getActivity().getApplicationContext() , contactList,
+                        R.layout.list_item, new String[] { TAG_POSITION, TAG_NAME,
+                        TAG_ROUND, TAG_GOAL_DIFFERENCE, TAG_POINTS },
+                        new int[] { R.id.team_position,
+                                R.id.team_name,
+                                R.id.matches_till_now,
+                                R.id.team_goals,
+                                R.id.team_points});
+                lv.setAdapter(adapter);
+            } catch (NullPointerException npe) {
+                Log.d("npe", "" + npe.getLocalizedMessage());
+            }
 
-            lv.setAdapter(adapter);
+
         }
     }
 
