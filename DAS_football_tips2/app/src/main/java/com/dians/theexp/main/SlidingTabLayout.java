@@ -1,4 +1,4 @@
-package com.example.jane.das_football_tips;
+package com.dians.theexp.main;
 
 /**
  * Created by Jane on 10/12/2015.
@@ -21,7 +21,6 @@ package com.example.jane.das_football_tips;
 
         import android.content.Context;
         import android.graphics.Typeface;
-        import android.os.Build;
         import android.support.v4.view.PagerAdapter;
         import android.support.v4.view.ViewPager;
         import android.util.AttributeSet;

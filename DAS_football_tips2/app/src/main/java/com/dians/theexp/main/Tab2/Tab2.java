@@ -1,4 +1,4 @@
-package com.example.jane.das_football_tips.Tab2;
+package com.dians.theexp.main.Tab2;
 
 /**
  * Created by Jane on 10/12/2015.
@@ -17,10 +17,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.com.dians.theexp.sqlite.helper.Match;
-import com.com.dians.theexp.sqlite.helper.Ticket;
-import com.com.dians.theexp.sqlite.model.MySQLiteHelper;
-import com.example.jane.das_football_tips.R;
+import com.dians.theexp.sqlite.helper.Match;
+import com.dians.theexp.sqlite.helper.Ticket;
+import com.dians.theexp.sqlite.model.MySQLiteHelper;
+import com.dians.theexp.main.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

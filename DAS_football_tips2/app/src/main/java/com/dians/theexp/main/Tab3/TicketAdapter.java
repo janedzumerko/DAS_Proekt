@@ -1,4 +1,4 @@
-package com.example.jane.das_football_tips.Tab3;
+package com.dians.theexp.main.Tab3;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,9 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.com.dians.theexp.sqlite.helper.Match;
-import com.com.dians.theexp.sqlite.helper.Ticket;
-import com.example.jane.das_football_tips.R;
+import com.dians.theexp.main.R;
 
 import java.util.List;
 

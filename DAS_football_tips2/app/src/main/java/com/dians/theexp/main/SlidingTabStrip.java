@@ -1,4 +1,4 @@
-package com.example.jane.das_football_tips;
+package com.dians.theexp.main;
 
 /**
  * Created by Jane on 10/12/2015.

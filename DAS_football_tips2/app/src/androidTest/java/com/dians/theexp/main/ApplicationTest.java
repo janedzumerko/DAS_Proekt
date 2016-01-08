@@ -1,4 +1,4 @@
-package com.example.jane.das_football_tips;
+package com.dians.theexp.main;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

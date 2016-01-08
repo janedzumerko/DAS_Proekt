@@ -4,7 +4,7 @@ HOW TO USE:
 
 */
 
-package com.com.dians.theexp.sqlite.model;
+package com.dians.theexp.sqlite.model;
 
 
 import android.content.ContentValues;
@@ -14,8 +14,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.com.dians.theexp.sqlite.helper.Match;
-import com.com.dians.theexp.sqlite.helper.Ticket;
+import com.dians.theexp.sqlite.helper.Match;
+import com.dians.theexp.sqlite.helper.Ticket;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

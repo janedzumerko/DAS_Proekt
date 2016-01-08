@@ -12,17 +12,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.NetworkError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.jane.das_football_tips.MainActivity;
-import com.example.jane.das_football_tips.R;
-
-import org.json.JSONObject;
+import com.dians.theexp.main.MainActivity;
+import com.dians.theexp.main.R;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -129,9 +132,29 @@ public class SignupActivity extends AppCompatActivity {
             }
         }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError verror) {
+            public void onErrorResponse(VolleyError error) {
                 progressDialog.dismiss();
-                VolleyLog.e("Error: ", verror.getStackTrace());
+
+                NetworkResponse networkResponse = error.networkResponse;
+                if (networkResponse != null) {
+                    Log.e("Volley", "Error. HTTP Status Code:" + networkResponse.statusCode);
+                }
+
+                if (error instanceof TimeoutError) {
+                    Log.e("Volley", "TimeoutError");
+                    Toast.makeText(getApplicationContext(), "Timeout network error!", Toast.LENGTH_SHORT).show();
+                }else if(error instanceof NoConnectionError){
+                    Toast.makeText(getApplicationContext(), "No connection!", Toast.LENGTH_SHORT).show();
+                    Log.e("Volley", "NoConnectionError");
+                } else if (error instanceof ServerError) {
+                    Log.e("Volley", "ServerError");
+                    Toast.makeText(getApplicationContext(), "Server error!", Toast.LENGTH_SHORT).show();
+                } else if (error instanceof NetworkError) {
+                    Log.e("Volley", "NetworkError");
+                    Toast.makeText(getApplicationContext(), "Network error!", Toast.LENGTH_SHORT).show();
+                }
+
+                //VolleyLog.e("Error: ", verror.getStackTrace());
             }
         }) {
             @Override

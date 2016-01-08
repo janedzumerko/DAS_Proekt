@@ -1,4 +1,4 @@
-package com.com.dians.theexp.sqlite.helper;
+package com.dians.theexp.sqlite.helper;
 
 /**
  * Created by k1ko on 11/24/15.

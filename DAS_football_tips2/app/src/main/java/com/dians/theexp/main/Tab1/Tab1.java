@@ -1,4 +1,4 @@
-package com.example.jane.das_football_tips.Tab1;
+package com.dians.theexp.main.Tab1;
 
 /**
  * Created by Jane on 10/12/2015.
@@ -7,19 +7,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-import com.example.jane.das_football_tips.R;
+import com.dians.theexp.main.R;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import org.json.JSONArray;

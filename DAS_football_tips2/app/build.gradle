@@ -3,10 +3,10 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
-    useLibrary 'org.apache.http.legacy'
+
 
     defaultConfig {
-        applicationId "com.example.jane.das_football_tips"
+        applicationId "com.dians.theexp.main"
     }
     buildTypes {
         release {
@@ -28,7 +28,6 @@ dependencies {
     compile 'com.github.rahatarmanahmed:circularprogressview:2.3.2'
     compile 'com.android.support:design:23.1.1'
     compile 'com.mcxiaoke.volley:library:1.0.19'
-    compile 'com.lambdaworks:scrypt:1.4.0'
     compile 'com.android.support:cardview-v7:23.1.1'
     compile 'com.android.support:recyclerview-v7:23.1.1'
 }

@@ -1,6 +1,4 @@
-package com.example.jane.das_football_tips.Tab3;
-
-import java.util.List;
+package com.dians.theexp.main.Tab3;
 
 /**
  * Created by k1ko on 1/4/16.

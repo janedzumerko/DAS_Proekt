@@ -1,4 +1,4 @@
-package com.example.jane.das_football_tips.Tab3;
+package com.dians.theexp.main.Tab3;
 
 /**
  * Created by Jane on 10/12/2015.
@@ -12,14 +12,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.com.dians.theexp.sqlite.helper.Match;
-import com.com.dians.theexp.sqlite.helper.Ticket;
-import com.com.dians.theexp.sqlite.model.MySQLiteHelper;
-import com.example.jane.das_football_tips.R;
+import com.dians.theexp.sqlite.helper.Match;
+import com.dians.theexp.sqlite.helper.Ticket;
+import com.dians.theexp.sqlite.model.MySQLiteHelper;
+import com.dians.theexp.main.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +41,7 @@ public class Tab3 extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         lView.setLayoutManager(llm);
+        lView.setAdapter(ticketAdapter);
 
 
         tView = (TextView) v.findViewById(R.id.msg_tab3);
@@ -77,7 +76,9 @@ public class Tab3 extends Fragment {
         }
         db.closeDB();
         ticketAdapter = new TicketAdapter(listTickets);
-        lView.setAdapter(ticketAdapter);
+        ticketAdapter.notifyDataSetChanged();
+
+
         return v;
     }
 }

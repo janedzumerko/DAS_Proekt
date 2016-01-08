@@ -1,4 +1,4 @@
-package com.example.jane.das_football_tips.Tab2;
+package com.dians.theexp.main.Tab2;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +9,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.example.jane.das_football_tips.R;
+import com.dians.theexp.main.R;
 
 import java.util.List;
 

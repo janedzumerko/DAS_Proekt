@@ -1,4 +1,4 @@
-package com.example.jane.das_football_tips;
+package com.dians.theexp.main;
 
 /**
  * Created by Jane on 10/12/2015.
@@ -7,9 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.example.jane.das_football_tips.Tab1.Tab1;
-import com.example.jane.das_football_tips.Tab2.Tab2;
-import com.example.jane.das_football_tips.Tab3.Tab3;
+import com.dians.theexp.main.Tab1.Tab1;
+import com.dians.theexp.main.Tab2.Tab2;
+import com.dians.theexp.main.Tab3.Tab3;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
