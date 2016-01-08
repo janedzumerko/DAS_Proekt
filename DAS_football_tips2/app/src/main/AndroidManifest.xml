@@ -24,15 +24,15 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name">
 
+
+        </activity>
+
+        <activity android:name="com.dians.theexp.auth.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity android:name="com.dians.theexp.auth.LoginActivity">
-
         </activity>
         <activity android:name="com.dians.theexp.auth.SignupActivity"></activity>
     </application>

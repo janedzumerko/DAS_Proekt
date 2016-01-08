@@ -6,6 +6,7 @@ package com.dians.theexp.auth;
 public class Singleton {
 
     public String username = null;
+    public Integer userId = -1;
 
     private static Singleton mInstance = null;
 

@@ -3,8 +3,10 @@ package com.dians.theexp.main.Tab2;
 /**
  * Created by Jane on 10/12/2015.
  */
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,10 +15,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.dians.theexp.sqlite.helper.Match;
 import com.dians.theexp.sqlite.helper.Ticket;
 import com.dians.theexp.sqlite.model.MySQLiteHelper;
@@ -37,6 +54,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class Tab2 extends Fragment {
 
@@ -99,22 +117,60 @@ public class Tab2 extends Fragment {
         btnCreateTicket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (matchesTips != null) {
                     MySQLiteHelper db = new MySQLiteHelper(getContext());
-                    long ticket_id = db.createTicket(new Ticket(getDateTime()));
+                    String timeOfTicketCreation = getDateTime();
+                    long ticket_id = db.createTicket(new Ticket(timeOfTicketCreation));
+
+                    JSONObject innerJSON = new JSONObject();
+                    JSONArray matchesJSON = new JSONArray();
+                    JSONObject matchJSON;
+
                     for (MatchTipInfo mti : matchesTips) {
                         Log.d("addticket-mti", mti.toString());
                         db.createMatch(new Match(mti.getHome_team(), mti.getAway_team(), Integer.parseInt(mti.getFull_time_bet())), ticket_id);
+                        try {
+                            matchJSON = new JSONObject();
+                            matchJSON.put("hometeam", mti.getHome_team());
+                            matchJSON.put("awayteam", mti.getAway_team());
+                            matchJSON.put("prediction", mti.getFull_time_bet());
+                            matchesJSON.put(matchJSON);
+
+                        }catch (JSONException jsone ) {
+
+                        }
                     }
-                    db.getTicketCount();
-                    db.getMatchCount();
+                    try {
+                        innerJSON.put("matches", matchesJSON);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    JSONObject finalJSON = new JSONObject();
 
+                    try {
+                        innerJSON.put("ticket_datetime", timeOfTicketCreation);
+                        innerJSON.put("user_id", PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId", -1));
+                        innerJSON.put("username", PreferenceManager.getDefaultSharedPreferences(getContext()).getString("username", ""));
+                    } catch (JSONException jsone) {
+                        Log.d("json_ex", "" + jsone.getStackTrace());
+                    }
 
+                    try {
+                        finalJSON.put("usertickets", innerJSON);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+
+                    }
+                    Log.d("finalJSON", "" + finalJSON.toString());
                     db.closeDB();
+
+                    saveTicketToServer(finalJSON);
 
                     Toast.makeText(getContext(), "Your ticket has been created.", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), "No matches selected.", Toast.LENGTH_SHORT).show();
+                    Log.d("matchesTips", "" + matchesTips.toString());
                 }
             }
         });
@@ -172,6 +228,69 @@ public class Tab2 extends Fragment {
 
 
         return v;
+    }
+
+    ProgressDialog progressDialog;
+
+    public void saveTicketToServer(JSONObject userticketsJSON) {
+
+        // initialize progress dialog
+        progressDialog = new ProgressDialog(getContext(), ProgressDialog.STYLE_SPINNER);
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Saving ticket...");
+        progressDialog.show();
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        String ticketsURL = "http://52.26.249.101/Login/saveTicket";
+
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, ticketsURL, userticketsJSON, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    progressDialog.dismiss();
+                    Log.d("response", "" + response.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //VolleyLog.e("Error: ", verror.getStackTrace());
+
+                progressDialog.dismiss();
+                NetworkResponse networkResponse = error.networkResponse;
+                if (networkResponse != null) {
+                    Log.e("Volley", "Error. HTTP Status Code:" + networkResponse.statusCode);
+                }
+
+                if (error instanceof TimeoutError) {
+                    Log.e("Volley", "TimeoutError");
+                    Toast.makeText(getContext(), "Timeout network error!", Toast.LENGTH_SHORT).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(getContext(), "No connection!", Toast.LENGTH_SHORT).show();
+                    Log.e("Volley", "NoConnectionError");
+                } else if (error instanceof ServerError) {
+                    Log.e("Volley", "ServerError");
+                    Toast.makeText(getContext(), "Server error!", Toast.LENGTH_SHORT).show();
+                } else if (error instanceof NetworkError) {
+                    Log.e("Volley", "NetworkError");
+                    Toast.makeText(getContext(), "Network error!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/json");
+                return params;
+            }
+        };
+
+        // add the request object to the queue to be executed
+        requestQueue.add(req);
+
     }
 
     private void initializeData() {

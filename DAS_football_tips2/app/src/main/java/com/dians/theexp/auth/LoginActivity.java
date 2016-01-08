@@ -40,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
 
     String user = null;
     String pass = null;
+    Integer userId = -1;
 
     ProgressDialog progressDialog;
 
@@ -115,6 +116,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), "Wrong username or password!", Toast.LENGTH_SHORT).show();
                     } else if (response.contains("id")) {
+                        userId = Integer.parseInt(response.split("\"")[3]);
                         Toast.makeText(getApplicationContext(), "Sign in successful!", Toast.LENGTH_SHORT).show();
                         commitUsernamePrefs();
                         sendToMain();
@@ -189,10 +191,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void commitUsernamePrefs() {
-        // save username
+        // save username and id
         Singleton.getInstance().username = user;
+        Singleton.getInstance().userId = userId;
+        Log.d("userid", "" + userId + " " + Singleton.getInstance().userId);
         PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
                 .putString("username", Singleton.getInstance().username)
+                .commit();
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
+                .putInt("userId", Singleton.getInstance().userId)
                 .commit();
     }
 }
