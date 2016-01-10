@@ -13,7 +13,13 @@ import java.util.List;
 /**
  * Created by k1ko on 1/4/16.
  */
+
+/*
+ * Custom Ticket Adapter used for better viewing of the list of tickets
+ * implemented using a ViewHolder for better scrolling experience
+ */
 public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketViewHolder> {
+
 
     private List<TicketInfo> ticketList;
 

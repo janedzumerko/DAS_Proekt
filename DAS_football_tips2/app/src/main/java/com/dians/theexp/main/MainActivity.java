@@ -92,13 +92,16 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         if (id == R.id.logout) {
+            // remove user data
+
             Singleton.getInstance().userId = -1;
             Singleton.getInstance().username = "";
 
             PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().remove("username").commit();
             PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().remove("userId").commit();
 
-            /**/
+            // workaround because the application keeps restarting the MainActivity if exited
+            // through finish();
             android.os.Process.killProcess(android.os.Process.myPid());
 
         }

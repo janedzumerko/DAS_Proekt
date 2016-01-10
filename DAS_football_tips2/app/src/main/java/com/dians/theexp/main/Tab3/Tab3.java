@@ -38,6 +38,8 @@ public class Tab3 extends Fragment {
 
         View v = inflater.inflate(R.layout.tab_3, container, false);
 
+        // sets the options for the listview
+        // will show a vertical list
         lView = (RecyclerView) v.findViewById(R.id.ticket_list_view);
         lView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
@@ -48,15 +50,16 @@ public class Tab3 extends Fragment {
 
         updateView();
 
-        if (tickets.size() == 0) {
-            tView.setVisibility(View.VISIBLE);
-            return v;
-        }
+
         tView.setVisibility(View.INVISIBLE);
 
         return v;
     }
 
+    /*
+     * Pulls all tickets from the local SQLite database
+     * and adds them to the adapter for viewing
+     */
     public void updateView() {
         db = new MySQLiteHelper(this.getContext());
 
@@ -86,6 +89,8 @@ public class Tab3 extends Fragment {
         ticketAdapter.notifyDataSetChanged();
     }
 
+    // used for detecting if we are in the third tab
+    // if true, it updates the adapter so the newest added tickets will show
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);

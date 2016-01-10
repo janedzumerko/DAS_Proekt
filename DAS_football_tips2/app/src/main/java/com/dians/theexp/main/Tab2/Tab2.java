@@ -37,6 +37,7 @@ import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import com.dians.theexp.auth.Singleton;
 import com.dians.theexp.sqlite.helper.Match;
 import com.dians.theexp.sqlite.helper.Ticket;
 import com.dians.theexp.sqlite.model.MySQLiteHelper;
@@ -62,6 +63,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
 import self.philbrown.droidQuery.$;
 import self.philbrown.droidQuery.AjaxOptions;
@@ -129,86 +131,36 @@ public class Tab2 extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if (matchesTips != null) {
+                Log.d("matchesTIPS", "" + matchesTips.toString() + " " + matchesTips.size());
+
+                if (matchesTips.size() > 0) {
                     MySQLiteHelper db = new MySQLiteHelper(getContext());
                     String timeOfTicketCreation = getDateTime();
                     long ticket_id = db.createTicket(new Ticket(timeOfTicketCreation));
 
-                    JSONObject innerJSON = new JSONObject();
-                    JSONArray matchesJSON = new JSONArray();
-                    JSONObject matchJSON;
-
                     StringBuilder sb = new StringBuilder();
-                    sb.append("{\n");
-                    sb.append("\t\"usertickets\": {\n");
-                    sb.append("\t\t\"username\": \"" + PreferenceManager.getDefaultSharedPreferences(getContext()).getString("username", "") + "\",\n");
-                    sb.append("\t\t\"user_id\": " + PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId", -1) + ",\n");
-                    sb.append("\t\t\"ticket_datetime\": \"" + timeOfTicketCreation + "\",\n");
-                    sb.append("\t\t\"matches\": [\n");
+                    sb.append("usertickets[username]=" + PreferenceManager.getDefaultSharedPreferences(getContext()).getString("username", ""));
+                    sb.append("&usertickets[user_id]=" + PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId", -1));
+
+                    sb.append("&usertickets[ticket_datetime]=" + timeOfTicketCreation);
 
 
 
                     for (MatchTipInfo mti : matchesTips) {
                         Log.d("addticket-mti", mti.toString());
                         db.createMatch(new Match(mti.getHome_team(), mti.getAway_team(), Integer.parseInt(mti.getFull_time_bet())), ticket_id);
-                        try {
-                            matchJSON = new JSONObject();
-                            matchJSON.put("hometeam", mti.getHome_team());
-                            matchJSON.put("awayteam", mti.getAway_team());
-                            matchJSON.put("prediction", mti.getFull_time_bet());
-                            matchesJSON.put(matchJSON);
-
-                        }catch (JSONException jsone ) {
-
-                        }
-
                     }
 
                     for (int i = 0; i < matchesTips.size(); ++i) {
-                        sb.append("\t\t\t{\n");
-
-                        sb.append("\t\t\t\t\"hometeam\": \"" + matchesTips.get(i).getHome_team() + "\",\n");
-                        sb.append("\t\t\t\t\"awayteam\": \"" + matchesTips.get(i).getAway_team() + "\",\n");
-                        sb.append("\t\t\t\t\"prediction\": " + matchesTips.get(i).getFull_time_bet() + "\n");
-
-                        if (i == matchesTips.size() - 1) {
-                            sb.append("\t\t\t}\n");
-                        } else {
-                            sb.append("\t\t\t},\n");
-                        }
+                        sb.append("&usertickets[matches][" + i + "][hometeam]=" + matchesTips.get(i).getHome_team());
+                        sb.append("&usertickets[matches][" + i + "][awayteam]=" + matchesTips.get(i).getAway_team());
+                        sb.append("&usertickets[matches][" + i + "][prediction]=" + matchesTips.get(i).getFull_time_bet());
                     }
 
-                    sb.append("\t\t]\n");
-                    sb.append("\t}\n");
-                    sb.append("}\n");
-
-                    try {
-                        innerJSON.put("matches", matchesJSON);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    JSONObject finalJSON = new JSONObject();
-
-                    try {
-                        innerJSON.put("ticket_datetime", timeOfTicketCreation);
-                        innerJSON.put("user_id", PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId", -1));
-                        innerJSON.put("username", PreferenceManager.getDefaultSharedPreferences(getContext()).getString("username", ""));
-                    } catch (JSONException jsone) {
-                        Log.d("json_ex", "" + jsone.getStackTrace());
-                    }
-
-                    try {
-                        finalJSON.put("usertickets", innerJSON);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-
-                    }
-                    Log.d("finalJSON", "" + finalJSON.toString());
                     db.closeDB();
 
                     try {
-                        //saveTicketToServer(finalJSON);
-                        saveTicketToServer(sb.toString(), finalJSON);
+                        saveTicketToServer(sb.toString());
                     } catch (Exception e) {
                         Log.d("saveticketerror", "" + e.getStackTrace());
                     }
@@ -278,10 +230,7 @@ public class Tab2 extends Fragment {
 
     ProgressDialog progressDialog;
 
-    public void saveTicketToServer(String userticketsJSON, final JSONObject userTicketJSON) {
-
-
-
+    public void saveTicketToServer(String userticketsQuery) {
 
         // initialize progress dialog
         progressDialog = new ProgressDialog(getContext(), ProgressDialog.STYLE_SPINNER);
@@ -290,19 +239,12 @@ public class Tab2 extends Fragment {
         progressDialog.setMessage("Saving ticket...");
         progressDialog.show();
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-
-        //Req
         String ticketsURL = "http://52.26.249.101/Login/saveTicket";
-
-        Log.d("json", userticketsJSON);
-
-        String test = "usertickets[username]=k1ko&usertickets[user_id]=2&usertickets[ticket_datetime]=ajsega1&usertickets[matches][0][hometeam]=mutaaaad&usertickets[matches][0][awayteam]=chelsea&usertickets[matches][0][prediction]=0&usertickets[matches][1][hometeam]=everton&usertickets[matches][1][awayteam]=tottenham&usertickets[matches][1][prediction]=2";
 
 
         $.ajax(new AjaxOptions().url(ticketsURL)
                 .type("POST")
-                .data(test)
+                .data(userticketsQuery)
                 .contentType("application/x-www-form-urlencoded; charset=UTF-8")
                 .context(getContext())
                 .success(new Function() {
@@ -323,53 +265,6 @@ public class Tab2 extends Fragment {
                         Log.d("errAjax", statusCode + " " + error);
                     }
                 }));
-
-        /*JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, ticketsURL, userticketsJSON, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    progressDialog.dismiss();
-                    Log.d("response", "" + response.toString());
-                } catch (Exception e) {
-                    Log.d("response", "" + response.toString());
-                    Log.d("error", "" + "" + e.getStackTrace());
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //VolleyLog.e("Error: ", verror.getStackTrace());
-
-                progressDialog.dismiss();
-
-                Log.d("Volley", "" + error.getStackTrace());
-
-                if (error instanceof TimeoutError) {
-                    Log.d("Volley", "TimeoutError");
-                    Toast.makeText(getContext(), "Timeout network error!", Toast.LENGTH_SHORT).show();
-                } else if (error instanceof NoConnectionError) {
-                    Toast.makeText(getContext(), "No connection!", Toast.LENGTH_SHORT).show();
-                    Log.d("Volley", "NoConnectionError");
-                } else if (error instanceof ServerError) {
-                    Log.d("Volley", "ServerError");
-                    Toast.makeText(getContext(), "Server error!", Toast.LENGTH_SHORT).show();
-                } else if (error instanceof NetworkError) {
-                    Log.d("Volley", "NetworkError");
-                    Toast.makeText(getContext(), "Network error!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("Content-Type","application/x-www-form-urlencoded; charset=UTF-8");
-                return params;
-            }
-        };
-
-        // add the request object to the queue to be executed
-        requestQueue.add(req);*/
-
     }
 
     private void initializeData() {
