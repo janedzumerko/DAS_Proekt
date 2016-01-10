@@ -5,6 +5,7 @@ package com.dians.theexp.main.Tab3;
  */
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,14 +15,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.NetworkError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.dians.theexp.sqlite.helper.Match;
 import com.dians.theexp.sqlite.helper.Ticket;
 import com.dians.theexp.sqlite.model.MySQLiteHelper;
 import com.dians.theexp.main.R;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import self.philbrown.droidQuery.$;
+import self.philbrown.droidQuery.AjaxOptions;
+import self.philbrown.droidQuery.Function;
 
 
 public class Tab3 extends Fragment {
@@ -48,6 +69,7 @@ public class Tab3 extends Fragment {
 
         tView = (TextView) v.findViewById(R.id.msg_tab3);
 
+
         updateView();
 
 
@@ -55,6 +77,8 @@ public class Tab3 extends Fragment {
 
         return v;
     }
+
+
 
     /*
      * Pulls all tickets from the local SQLite database

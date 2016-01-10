@@ -104,4 +104,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MatchTipInfoViewHo
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
+
+    public List<MatchTipInfo> getItems() {
+        return persons;
+    }
 }

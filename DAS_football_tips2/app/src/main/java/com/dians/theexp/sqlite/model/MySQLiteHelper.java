@@ -319,6 +319,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     }
 
 
+    public void clearTables() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from " + TABLE_TICKET);
+        db.execSQL("delete from " + TABLE_MATCH);
+        db.execSQL("delete from " + TABLE_TICKET_MATCH);
+        db.close();
+    }
+
     // @TODO
     public Long createMatchTicket(long match_id, long ticket_id) {
 

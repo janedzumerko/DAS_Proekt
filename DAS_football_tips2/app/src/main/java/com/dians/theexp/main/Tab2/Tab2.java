@@ -81,6 +81,8 @@ public class Tab2 extends Fragment {
 
     public String deneshenDatumZaTest;
 
+    RVAdapter adapter;
+
     public Calendar c;
 
     TextView dateTextView;
@@ -130,8 +132,6 @@ public class Tab2 extends Fragment {
         btnCreateTicket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Log.d("matchesTIPS", "" + matchesTips.toString() + " " + matchesTips.size());
 
                 if (matchesTips.size() > 0) {
                     MySQLiteHelper db = new MySQLiteHelper(getContext());
@@ -288,7 +288,7 @@ public class Tab2 extends Fragment {
     }
 
     private void initializeAdapter() {
-        RVAdapter adapter = new RVAdapter(matchesTips);
+        adapter = new RVAdapter(matchesTips);
         rv.setAdapter(adapter);
     }
 

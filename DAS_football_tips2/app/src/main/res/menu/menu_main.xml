@@ -4,4 +4,10 @@
 
     <item android:id="@+id/logout" android:title="@string/logout"
          />
+
+    <item
+        android:id="@+id/action_favorite"
+        android:icon="@drawable/dicon"
+        android:title="Get all your tickets"
+        app:showAsAction="ifRoom"/>
 </menu>
