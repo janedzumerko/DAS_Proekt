@@ -52,6 +52,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
+        /*
+         *   Check whether the user is logging in for the first time.
+         *   If true, it sends him directly to the main view.
+         */
         String checkLoggedInUserName = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext()).getString("username",
                         Singleton.getInstance().username);
@@ -85,12 +90,6 @@ public class LoginActivity extends AppCompatActivity {
             user = inputUsername.getText().toString();
             pass = inputPassword.getText().toString();
 
-            /*HashAuthImpl hashingImpl = new HashAuthImpl(pass);
-
-            if (hashingImpl.checkPass(pass)) {
-                pass = hashingImpl.getGeneratedSecuredPasswordHash();
-            }*/
-
             // initialize progress dialog
             progressDialog = new ProgressDialog(LoginActivity.this, ProgressDialog.STYLE_SPINNER);
             progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -102,6 +101,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
+    /*
+     * Passes the entered username and password to the server using key-value pairs
+     * and waits for the response. If the response is valid, it will return the
+     * id, username and email of the user and then redirect him to the main view.
+     */
     public void performPOSTRequest(final String username, final String password) {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         String URL = loginURL;
@@ -136,6 +141,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.e("Volley", "Error. HTTP Status Code:" + networkResponse.statusCode);
                 }
 
+                // Network errors validation
                 if (error instanceof TimeoutError) {
                     Log.e("Volley", "TimeoutError");
                     Toast.makeText(getApplicationContext(), "Timeout network error!", Toast.LENGTH_SHORT).show();
@@ -153,6 +159,7 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         }) {
+            // key value pairs
             @Override
             protected Map<String,String> getParams() {
                 Map<String,String> params = new HashMap<String, String>();
@@ -182,8 +189,6 @@ public class LoginActivity extends AppCompatActivity {
 
     public void sendToMain() {
         // Start the Main activity
-
-
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
         finish();

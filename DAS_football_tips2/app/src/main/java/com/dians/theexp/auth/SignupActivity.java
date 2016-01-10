@@ -77,25 +77,6 @@ public class SignupActivity extends AppCompatActivity {
             pass = inputPassword.getText().toString();
             email = inputEmail.getText().toString();
 
-            /*HashAuthImpl hashingImpl = new HashAuthImpl(pass);
-            if (hashingImpl.checkPass(pass)) {
-                pass = hashingImpl.getGeneratedSecuredPasswordHash();
-            }*/
-
-            /*String hash = null, secondHash = "";
-            try {
-                hash = PasswordHash.createHash(pass);
-                secondHash = PasswordHash.createHash(pass);
-            } catch (NoSuchAlgorithmException nsae) {
-
-            } catch (InvalidKeySpecException ikse) {
-
-            }
-
-            if (hash.equals(secondHash)) {
-                performPOSTRequest(user, pass, email);
-            }*/
-
             // initialize progress dialog
             progressDialog = new ProgressDialog(SignupActivity.this, ProgressDialog.STYLE_SPINNER);
             progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -107,6 +88,11 @@ public class SignupActivity extends AppCompatActivity {
         }
     }
 
+    /*
+     * Sends the user input to the server and saves them if valid. If the response is successful,
+     * the user is redirected to the login activity. If not, an error is displayed.
+     *
+     */
     public void performPOSTRequest(final String username, final String password, final String email) {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         String URL = registerURL;
@@ -177,7 +163,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void sendToLoginForm(View v) {
-        // Start the Signup activity
+        // Start the Login activity
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
         finish();
